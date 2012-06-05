@@ -1,9 +1,13 @@
 var express = require('express');
+
 //memory storage
 //var ArticleProvider = require('./art-memory').ArticleProvider;
 
+
+
 //mongo storage
 var ArticleProvider = require('./art-mongo').ArticleProvider;
+
 
 var app = module.exports = express.createServer();
 
@@ -25,9 +29,6 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
-//specify env if app runs on Heroku or localhost
-var port = process.env.PORT || 27017;
-var mongoHost = process.env.MONGOLAB_URI || 'localhost';
 
 var articleProvider= new ArticleProvider(mongoHost, port);
 
