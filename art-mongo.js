@@ -31,6 +31,9 @@ ArticleProvider = function() {
 
   //this.db= new Db('heroku_app4943648', new Server('heroku_app4943648:a522qdedvi1nm06g30ccb5jic9@ds033087.mongolab.com', 33087, {auto_reconnect: true}, {}));
   //this.db.open(function(){});
+  
+  this.db = db;
+  this.db.open(function(){});
 };
 
 
