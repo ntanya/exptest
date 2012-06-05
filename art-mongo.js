@@ -53,8 +53,10 @@ console.log("in getCollection");
 ArticleProvider.prototype.findAll = function(callback) {
 	console.log("in FindAll");
     this.getCollection(function(error, article_collection) {
+    	console.log("error: " + error);
       if( error ) callback(error)
       else {
+      	console.log("in else part");
         article_collection.find().toArray(function(error, results) {
           if( error ) callback(error)
           else callback(null, results)
