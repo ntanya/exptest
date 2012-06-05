@@ -30,7 +30,7 @@ app.configure('production', function(){
 });
 
 
-var articleProvider= new ArticleProvider(mongoHost, port);
+var articleProvider= new ArticleProvider();
 
 app.get('/', function(req, res){
     articleProvider.findAll( function(error,docs){

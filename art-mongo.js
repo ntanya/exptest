@@ -7,12 +7,12 @@ var ObjectID = require('mongodb').ObjectID;
 
 
 //specify env if app runs on Heroku or localhost
-var port = process.env.PORT || 27017;
-var mongoHost = process.env.MONGOLAB_URI || 'localhost';
+//var port = process.env.PORT || 27017;
+//var mongoHost = process.env.MONGOLAB_URI || 'localhost';
 
 //mongodb://heroku_app4943648:a522qdedvi1nm06g30ccb5jic9@ds033087.mongolab.com:33087/heroku_app4943648
 
-ArticleProvider = function(host, port) {
+ArticleProvider = function() {
 
   this.db= new Db('heroku_app4943648', new Server('heroku_app4943648:a522qdedvi1nm06g30ccb5jic9@ds033087.mongolab.com', 33087, {auto_reconnect: true}, {}));
   this.db.open(function(){});
