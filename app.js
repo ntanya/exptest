@@ -3,8 +3,6 @@ var express = require('express');
 //memory storage
 //var ArticleProvider = require('./art-memory').ArticleProvider;
 
-var connect = require('connect'),
-
 //mongo storage
 var ArticleProvider = require('./art-mongo').ArticleProvider;
 
