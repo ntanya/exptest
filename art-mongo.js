@@ -44,6 +44,7 @@ ArticleProvider = function() {
 ArticleProvider.prototype.getCollection= function(callback) {
 console.log("in getCollection");
   this.db.collection('articles', function(error, article_collection) {
+  	console.log("error in getCollection: " + error);
     if( error ) callback(error);
     else callback(null, article_collection);
   });
