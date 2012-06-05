@@ -31,6 +31,7 @@ app.configure('production', function(){
 var articleProvider= new ArticleProvider();
 
 app.get('/', function(req, res){
+	console.log("in get call");
     articleProvider.findAll( function(error,docs){
         res.render('index.jade', { locals: {
             title: 'Blog',

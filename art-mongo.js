@@ -42,6 +42,7 @@ ArticleProvider = function() {
 //getCollection
 
 ArticleProvider.prototype.getCollection= function(callback) {
+console.log("in getCollection");
   this.db.collection('articles', function(error, article_collection) {
     if( error ) callback(error);
     else callback(null, article_collection);
@@ -50,6 +51,7 @@ ArticleProvider.prototype.getCollection= function(callback) {
 
 //findAll
 ArticleProvider.prototype.findAll = function(callback) {
+	console.log("in FindAll");
     this.getCollection(function(error, article_collection) {
       if( error ) callback(error)
       else {
