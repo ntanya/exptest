@@ -25,7 +25,7 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
-var articleProvider= new ArticleProvider('localhost',27017);
+var articleProvider= new ArticleProvider();
 
 app.get('/', function(req, res){
     articleProvider.findAll( function(error,docs){

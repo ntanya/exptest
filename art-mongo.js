@@ -4,8 +4,13 @@ var Server = require('mongodb').Server;
 var BSON = require('mongodb').BSON;
 var ObjectID = require('mongodb').ObjectID;
 
-ArticleProvider = function(host, port) {
-  this.db= new Db('node-mongo-blog', new Server(host, port, {auto_reconnect: true}, {}));
+var port = process.env.PORT || 3000;
+var mongoHost = process.env.MONGOLAB_URI || 'localhost';
+
+
+ArticleProvider = function() {
+  this.db= new Db('node-mongo-blog', new Server(mongoHost, port, {auto_reconnect: true}, {}));
+    
   this.db.open(function(){});
 };
 
