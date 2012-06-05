@@ -25,7 +25,11 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
-var articleProvider= new ArticleProvider();
+//specify env if app runs on Heroku or localhost
+var port = process.env.PORT || 27017;
+var mongoHost = process.env.MONGOLAB_URI || 'localhost';
+
+var articleProvider= new ArticleProvider(mongoHost, port);
 
 app.get('/', function(req, res){
     articleProvider.findAll( function(error,docs){
