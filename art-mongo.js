@@ -28,7 +28,7 @@ ArticleProvider = function() {
 	  });
 	  
 	    this.db = db;
-  		this.db.open(function(){});
+  		//this.db.open(function(){});
 	});
   
 
