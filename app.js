@@ -1,4 +1,5 @@
 var express = require('express');
+var connect = require('connect');
 
 //memory storage
 //var ArticleProvider = require('./art-memory').ArticleProvider;
