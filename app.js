@@ -1,11 +1,8 @@
 var express = require('express');
 var connect = require('connect');
-
-//memory storage
-//var ArticleProvider = require('./art-memory').ArticleProvider;
-
-//mongo storage
-var ArticleProvider = require('./art-mongo').ArticleProvider;
+var http = require("http");
+var https = require("https");
+var mongo = require("mongodb");
 
 
 var app = module.exports = express.createServer();
@@ -28,46 +25,88 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
+var mongostr = "mongodb://localhost/dataintel";
+var database = null;
 
-var articleProvider= new ArticleProvider();
+function dbsave(data)
+{
+	mongo.connect(mongostr, {}, function(error, db)
+	{		
+			console.log("connected, db: " + db);
+			
+			database = db;
+			
+			var mycoll = database.collection("leads");
+			
+			console.log("mycoll: " + mycoll);
+			console.log("userdata: " + data);
+			mycoll.insert(data, function(){console.log("saved");});
+			
+			database.addListener("error", function(error){
+			console.log("Error connecting to MongoLab");
+			
+	});
+	
+	});
+}
 
-app.get('/', function(req, res){
-	console.log("in get call");
-    articleProvider.findAll( function(error,docs){
-        res.render('index.jade', { locals: {
-            title: 'Blog',
-            articles:docs
-            }
-        });
-    })
+
+
+app.get('/:id', function(req, res){
+    
+	var user = req.params.id;
+	var completeResponse = "";
+	
+	var options = {
+	  host: 'api.twitter.com',
+	  port: 80,
+	  path: '/1/users/show.json?screen_name=' + user
+	};
+	
+	var request = http.get(options, function(result) {
+	  console.log("Got response: " + result.statusCode);
+	}).on('error', function(e) {
+	  console.log("Got error: " + e.message);
+	});
+	
+	
+	request.on('response', function (response) {
+	  response.on('data', function (chunk) {
+	  
+	  	res.send("data: " + chunk);
+		completeResponse += chunk;
+		
+	  });
+	  
+	  response.on('end', function(){
+	  
+	  	var dataObj =  JSON.parse(completeResponse);
+		
+		console.log ("parsed");
+		
+		var saveObj = {
+		id: dataObj["id"],
+		created_at: dataObj["created_at"],
+		description: dataObj["description"],
+		followers_count: dataObj["followers_count"],
+		friends_count: dataObj["friends_count"],
+		location: dataObj["location"],
+		name: dataObj["name"]
+		};
+
+		//console.log("screen name: " + dataObj["screen_name"]);
+		// Only save people with more than 1000 followers
+		if(dataObj["followers_count"] > 1000){
+			dbsave(saveObj);	  	
+	  	}
+	    res.send('Saved Twitter user: '  + dataObj["screen_name"] + ", with number of followers: " + dataObj["followers_count"]);
+	  
+	  });
+	});
+ 
 });
 
 
-app.get('/blog/new', function(req, res) {
-    res.render('blog_new.jade', { locals: {
-        title: 'New Post'
-    }
-    });
-});
-
-app.post('/blog/new', function(req, res){
-    articleProvider.save({
-        title: req.param('title'),
-        body: req.param('body')
-    }, function( error, docs) {
-        res.redirect('/')
-    });
-});
-
-app.get('/blog/:id', function(req, res){
-    articleProvider.findById(req.params.id, function(error,article){
-        res.render('blog_item.jade', { locals: {
-              title: article.title,
-              article:article
-            }
-        });
-    })
-});
 
 
 var port = process.env.PORT || 3000;
